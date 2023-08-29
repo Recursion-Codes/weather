@@ -1,0 +1,48 @@
+<head>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body onload="getlocation()">
+    <div id="weathercontainer">
+        <!--
+            <div class="day">
+                <div class="weathericon"></div>
+                <div class="maximum"></div>
+                <div class="minimum"></div>
+            </div>
+        -->
+    </div>
+    <script>
+        var contentbox = document.getElementById("weathercontainer");
+        function getlocation(){
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
+        
+        function showPosition(position) {
+            var latitude = parseFloat(position.coords.latitude);
+            var longitude = parseFloat(position.coords.longitude);
+            fetch("https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude
+            +"&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit"
+            +"=mph&timezone=America%2FLos_Angeles")
+            .then((response) => response.json())
+            .then((weather) => {
+                console.log("pass");
+                console.log(weather);
+                for( let i = 0; i < 7; i++){
+                    var datestring=String(weather.daily.time[i]);
+                    datestring = datestring.slice(5);
+                    if (datestring[0] == 0){
+                    datestring = datestring.slice(1);
+                    console.log(datestring);
+                }
+                    contentbox.innerHTML += "<div class=\"day\"><div class=\"date\">"
+                        +datestring
+                        +"</div><div class=\"weathericon\">"
+                        +"</div><div class=\"maximum\">"+weather.daily.temperature_2m_max[i]
+                        +"</div><div class=\"minimum\">"+weather.daily.temperature_2m_min[i]
+                        +"</div></div>"
+                }});
+                
+        }
+        
+    </script>
+</body>

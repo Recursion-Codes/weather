@@ -1,0 +1,26 @@
+    
+    @font-face{
+        font-family:"Light";
+        src:url(Roboto-Light.ttf);
+    }
+    @font-face{
+        font-family:"Medium";
+        src:url(Roboto-Medium.ttf);
+    }
+
+    body{
+        background-image: linear-gradient(to right, rgb(62, 56, 95) ,black);
+        color:white;
+        margin:0;
+    }
+    .day{
+        font-family:Medium;
+    }
+    #weathercontainer{
+        width:100%;
+        height:100%;
+        display:flex;
+        gap:4vh;
+        align-items: center;
+        justify-content: center;
+    }
