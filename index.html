@@ -18,14 +18,34 @@
         }
         
         function showPosition(position) {
+            var timezonevar = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            let date = new Date(new Date().toLocaleString("en-US", {timeZone: timezonevar}));
+            time = date.toString().slice(16,18);
             var latitude = parseFloat(position.coords.latitude);
             var longitude = parseFloat(position.coords.longitude);
+            console.log(time);
+            if(time>=0 && time <6){
+                console.log("morning");
+              }
+            else if(time >= 6 && time < 12){
+                console.log("late morning");
+            }
+            else if(time >= 12 && time < 18){
+                document.body.style.backgroundImage="linear-gradient(to right, cornsilk,bisque)";
+                contentbox.style.color ="coral";
+                console.log("afternoon");
+            }
+            else if(time >= 18 && time < 24){
+                console.log("night");
+            }
+            else if(time >= 24 || time < 6){
+                console.log("late night");
+            }
             fetch("https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude
             +"&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit"
             +"=mph&timezone=America%2FLos_Angeles")
             .then((response) => response.json())
             .then((weather) => {
-                console.log("pass");
                 console.log(weather);
                 for( let i = 0; i < 7; i++){
                     var datestring=String(weather.daily.time[i]);
