@@ -9,13 +9,24 @@
     }
 
     body{
-        background-image: linear-gradient(to right, rgb(62, 56, 95) ,black);
+        transition:2s;
         color:white;
         margin:0;
     }
+    #backgroundcolor{
+      width:100%;
+      height:100%;  
+        background: linear-gradient(to right, rgb(62, 56, 95) ,black);
+        z-index:1;
+        position:absolute;
+        transition:1s;
+    }
     .day{
         font-family:Medium;
+        top:50%;
+        position:sticky;
     }
+
     #weathercontainer{
         width:100%;
         height:100%;
@@ -23,4 +34,10 @@
         gap:4vh;
         align-items: center;
         justify-content: center;
+        flex-wrap:wrap;
+        z-index:2;
+        position:absolute;
+        opacity:0;
+        transition:1s;
+        transition-timing-function:ease-in-out;
     }

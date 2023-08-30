@@ -2,17 +2,20 @@
     <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body onload="getlocation()">
+    <div id="backgroundcolor"></div>
     <div id="weathercontainer">
         <!--
             <div class="day">
                 <div class="weathericon"></div>
                 <div class="maximum"></div>
                 <div class="minimum"></div>
+                <div class="precipitation"></div>
             </div>
         -->
     </div>
     <script>
         var contentbox = document.getElementById("weathercontainer");
+        var backgroundcolor = document.getElementById("backgroundcolor");
         function getlocation(){
             navigator.geolocation.getCurrentPosition(showPosition);
         }
@@ -23,43 +26,53 @@
             time = date.toString().slice(16,18);
             var latitude = parseFloat(position.coords.latitude);
             var longitude = parseFloat(position.coords.longitude);
+            time = 8
             console.log(time);
-            if(time>=0 && time <6){
-                console.log("morning");
-              }
-            else if(time >= 6 && time < 12){
-                console.log("late morning");
+            if(time >= 6 && time < 12){
+                document.body.style.background="linear-gradient(to right, #11787f,#fff7a4)";
+                contentbox.style.color ="white";
+                console.log(" morning");
             }
             else if(time >= 12 && time < 18){
-                document.body.style.backgroundImage="linear-gradient(to right, cornsilk,bisque)";
+                document.body.style.background="linear-gradient(to right, #fff7a4, rgb(62, 56, 95))";
                 contentbox.style.color ="coral";
                 console.log("afternoon");
             }
             else if(time >= 18 && time < 24){
+                document.body.style.background="linear-gradient(to right, rgb(62, 56, 95) ,black)";
+                contentbox.style.color ="white";
                 console.log("night");
             }
-            else if(time >= 24 || time < 6){
+            else if( time >= 0 || time < 6){
+                document.body.style.background="linear-gradient(to right, black,#11787f)";
+                contentbox.style.color ="white";
                 console.log("late night");
             }
+                contentbox.style.opacity="1";
+            backgroundcolor.style.opacity="0";
             fetch("https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude
-            +"&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit"
-            +"=mph&timezone=America%2FLos_Angeles")
+            +"&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&daily="
+            + "precipitation_probability_max&timezone=" + timezonevar)
             .then((response) => response.json())
             .then((weather) => {
                 console.log(weather);
                 for( let i = 0; i < 7; i++){
+                    weather.daily.precipitation_probability_max[4] = 100;
                     var datestring=String(weather.daily.time[i]);
                     datestring = datestring.slice(5);
                     if (datestring[0] == 0){
                     datestring = datestring.slice(1);
                     console.log(datestring);
                 }
-                    contentbox.innerHTML += "<div class=\"day\"><div class=\"date\">"
-                        +datestring
-                        +"</div><div class=\"weathericon\">"
-                        +"</div><div class=\"maximum\">"+weather.daily.temperature_2m_max[i]
-                        +"</div><div class=\"minimum\">"+weather.daily.temperature_2m_min[i]
-                        +"</div></div>"
+                    var contentString = "<div class=\"day\"><div class=\"date\">"+datestring + "</div>"
+                        +"<div class=\"weathericon\"></div>"
+                        +"<div class=\"maximum\">"+weather.daily.temperature_2m_max[i] + "</div>"
+                        +"<div class=\"minimum\">"+weather.daily.temperature_2m_min[i] + "</div>"
+                    if(weather.daily.precipitation_probability_max[i]>10){
+                        contentString +=  "<div class=\"precipitation\">"+weather.daily.precipitation_probability_max[i]
+                        +"%</div></div>"
+                    }
+                    contentbox.innerHTML += contentString;
                 }});
                 
         }
