@@ -19,7 +19,7 @@
                 document.body.style.background="linear-gradient(to right, #fff7a4, rgb(62, 56, 95))";
             }
             else if(time >= 18 && time < 24){
-                document.body.style.backgroundImage="-moz-linear-gradient(to right, rgb(62, 56, 95) , black)";
+                document.body.style.backgroundImage="linear-gradient(to right, rgb(62, 56, 95) , black)";
             }
             else if( time >= 0 || time < 6){
                 document.body.style.background="linear-gradient(to right, black, #11787f)";
